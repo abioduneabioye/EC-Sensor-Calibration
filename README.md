@@ -17,13 +17,13 @@ To compare and calibrate the lab-developed EC sensor against a commercial conduc
 
 ## Equipment
 
-- Lab-developed EC sensor  
-- VWR Symphony SB80PC commercial conductivity meter  
-- Mettler Toledo XS104 analytical balance  
-- SCILOGEX MS-H380-Pro magnetic stirrer/hot plate  
-- NaCl salt (non-iodized)  
-- DI or distilled water  
-- 8 sample bottles (500 mL each)  
+* Lab-developed EC sensor  
+* VWR Symphony SB80PC commercial conductivity meter  
+* Mettler Toledo XS104 analytical balance  
+* SCILOGEX MS-H380-Pro magnetic stirrer/hot plate  
+* NaCl salt (non-iodized)  
+* DI or distilled water  
+* 8 sample bottles (500 mL each)  
 
 ---
 
@@ -128,16 +128,16 @@ python scripts/plot_results.py
 
 ## Expected Outputs
 
-- `results/calibration_summary.csv`  
-- `results/figures/calibration_curve.png`  
-- `results/figures/ec_vs_concentration_log.png`  
-- `results/figures/error_plot.png`  
+* `results/calibration_summary.csv`  
+* `results/figures/calibration_curve.png`  
+* `results/figures/ec_vs_concentration_log.png`  
+* `results/figures/error_plot.png`  
 
 ---
 
 ## Notes
 
-- The commercial EC meter is used as the **reference (ground truth)**  
-- NaCl solutions provide controlled variation in ionic concentration  
-- Temperature and mixing conditions are controlled for accuracy  
-- Low-speed stirring is used to ensure uniformity and minimize air bubbles  
+* The commercial EC meter is used as the **reference (ground truth)**  
+* NaCl solutions provide controlled variation in ionic concentration  
+* Temperature and mixing conditions are controlled for accuracy  
+* Low-speed stirring is used to ensure uniformity and minimize air bubbles  
