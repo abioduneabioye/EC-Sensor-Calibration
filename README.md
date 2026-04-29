@@ -5,59 +5,98 @@
 ![Status](https://img.shields.io/badge/Status-Completed-success.svg)
 ![Made with](https://img.shields.io/badge/Made%20with-Data%20Science-orange)
 
-This project presents a systematic calibration of a lab-developed electrical conductivity (EC) sensor using sodium chloride (NaCl) solutions across a logarithmic concentration range. A commercial EC meter (VWR Symphony SB80PC) is used as the reference instrument to evaluate sensor accuracy and performance.
+This project presents a systematic calibration of a lab-developed electrical conductivity (EC) sensor using sodium chloride (NaCl) solutions across a logarithmic concentration range. A commercial EC meter (VWR Symphony SB80PC) is used as the reference instrument to evaluate sensor accuracy, bias, and performance.
 
 ---
 
 ## Objective
 
-To compare and calibrate the lab-developed EC sensor against a commercial conductivity meter across a logarithmic NaCl concentration range.
+To calibrate a lab-developed EC sensor by comparing its measurements against a commercial conductivity meter across a controlled NaCl concentration range.
 
 ---
 
 ## Equipment
 
-* Lab-developed EC sensor  
-* VWR Symphony SB80PC commercial conductivity meter  
-* Mettler Toledo XS104 analytical balance  
-* SCILOGEX MS-H380-Pro magnetic stirrer/hot plate  
-* NaCl salt (non-iodized)  
-* DI or distilled water  
-* 8 sample bottles (500 mL each)  
+- Lab-developed EC sensor  
+- VWR Symphony SB80PC commercial conductivity meter  
+- Mettler Toledo XS104 analytical balance (±0.0001 g resolution)  
+- SCILOGEX MS-H380-Pro magnetic stirrer/hot plate  
+- NaCl salt (non-iodized)  
+- Deionized (DI) or distilled water  
+- 8 sample bottles (500 mL each)  
+- Temperature probe  
+- Water bath setup (for temperature control)  
 
 ---
 
 ## Sample Preparation
 
-Each bottle contains **500 mL of DI water**, with varying NaCl mass to achieve a logarithmic concentration range.
+Each solution is prepared using **500 mL DI water**, with varying NaCl mass to create a logarithmic concentration range.
 
-| Bottle | NaCl Mass (g) | Concentration (g/L) | log10(Conc) |
-|:------:|--------------:|--------------------:|------------:|
-| B1     | 0.000         | 0.00                | —           |
-| B2     | 0.005         | 0.01                | -2.00       |
-| B3     | 0.015         | 0.03                | -1.52       |
-| B4     | 0.050         | 0.10                | -1.00       |
-| B5     | 0.150         | 0.30                | -0.52       |
-| B6     | 0.500         | 1.00                | 0.00        |
-| B7     | 1.500         | 3.00                | 0.48        |
-| B8     | 5.000         | 10.00               | 1.00        |
+| Bottle | NaCl Mass (g) | Concentration (g/L) | log10(Conc) | Expected EC (µS/cm)* |
+|:------:|--------------:|--------------------:|------------:|--------------------:|
+| B1     | 0.000         | 0.00                | —           | ~0–10              |
+| B2     | 0.005         | 0.01                | -2.00       | ~20–30             |
+| B3     | 0.015         | 0.03                | -1.52       | ~60–80             |
+| B4     | 0.050         | 0.10                | -1.00       | ~200–300           |
+| B5     | 0.150         | 0.30                | -0.52       | ~600–800           |
+| B6     | 0.500         | 1.00                | 0.00        | ~2000              |
+| B7     | 1.500         | 3.00                | 0.48        | ~5000–6000         |
+| B8     | 5.000         | 10.00               | 1.00        | ~15000–20000       |
 
-> All solutions were prepared using consistent volume (500 mL) and high-precision mass measurements.
+> *Expected EC values are approximate and depend on temperature and solution conditions.
 
 ---
 
-## Workflow
+## Mass Measurement and Transfer Accuracy
 
-1. Prepare NaCl solutions at specified concentrations  
-2. Stir solutions gently to ensure homogeneity  
+- NaCl is weighed using a **tared weighing boat (or weighing paper)** on an analytical balance.  
+- At low masses (e.g., 0.005 g), relative uncertainty increases and is estimated.  
+- To minimize transfer loss:
+  - Salt is transferred carefully using a spatula  
+  - The weighing container is rinsed with DI water (spray bottle) to recover residual salt  
+- After transfer, the solution is brought to a **fixed final volume of 500 mL**
+
+> This ensures mass conservation and maintains concentration accuracy within approximately **≤1% uncertainty**, making solution preparation a minor source of error.
+
+---
+
+## Temperature Control
+
+Electrical conductivity is temperature-dependent; therefore, maintaining **20°C** is essential.
+
+- Solutions are placed in a **well-mixed water bath**  
+- If a dedicated bath is unavailable, an improvised bath will be used  
+- Temperature is continuously monitored using a thermometer  
+- Measurements are taken only after thermal equilibrium is reached  
+
+---
+
+## Measurement Procedure
+
+For each concentration:
+
+1. Gently mix solution using a magnetic stirrer  
+2. Transfer approximately **50 mL** into a clean beaker or flask  
 3. Measure EC using the **commercial EC meter (reference)**  
 4. Measure EC using the **lab-developed sensor**  
-5. Record temperature for each measurement  
-6. Repeat measurements (recommended: 3 trials)  
-7. Fit calibration model and evaluate performance  
+5. Record temperature  
+6. Repeat measurements for **3 trials**
 
-> Measurements were conducted under controlled stirring conditions with consistent probe placement to ensure repeatability.
+Between measurements:
 
+- Probes are rinsed with DI water  
+- Probes are dried to avoid dilution  
+- Measurements are conducted from **low → high concentration** to minimize contamination  
+
+---
+
+## Trials and Data Collection
+
+Each concentration is measured in **triplicate (3 trials)**:
+
+- Each trial is recorded as a separate row in the dataset  
+- Final calibration uses **averaged values** to reduce noise  
 ---
 
 ## Results
