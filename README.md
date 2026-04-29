@@ -85,6 +85,7 @@ ec-sensor-calibration/
 │
 ├── README.md
 ├── requirements.txt
+├── EC_calibration.ipynb  
 │
 ├── data/
 │   ├── raw/
