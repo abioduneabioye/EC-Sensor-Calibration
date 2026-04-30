@@ -1,45 +1,57 @@
 import pandas as pd
 import numpy as np
 import os
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 
 # Load data
 df = pd.read_csv("data/raw/ec_calibration_template.csv")
 
-# Remove rows without measurements
-df = df.dropna(subset=["commercial_ec_uS_cm", "lab_sensor_ec_uS_cm"])
+# Use only valid calibration samples
+df_cal = df[
+    (df["use_for_calibration"].str.lower() == "yes") &
+    (df["adj_ratio"] > 0) &
+    (df["commercial_ec_uS_cm"] > 0)
+].copy()
 
-# Prepare data
-X = df[["lab_sensor_ec_uS_cm"]]
-y = df["commercial_ec_uS_cm"]
+# Average trials by sample
+df_avg = df_cal.groupby(
+    ["sample_id", "nacl_mass_g", "volume_ml", "concentration_g_L"],
+    as_index=False
+).mean(numeric_only=True)
 
-# Fit model
-model = LinearRegression()
-model.fit(X, y)
+# Log-log quadratic calibration
+x = np.log10(df_avg["adj_ratio"])
+y = np.log10(df_avg["commercial_ec_uS_cm"])
 
-# Predict corrected EC
-df["lab_sensor_corrected_ec"] = model.predict(X)
+a, b, c = np.polyfit(x, y, 2)
 
-# Calculate error
-df["error"] = df["lab_sensor_corrected_ec"] - df["commercial_ec_uS_cm"]
-df["percent_error"] = (df["error"] / df["commercial_ec_uS_cm"]) * 100
+df_avg["predicted_ec_uS_cm"] = 10 ** (a * x**2 + b * x + c)
 
-# Metrics
-r2 = r2_score(y, df["lab_sensor_corrected_ec"])
-rmse = np.sqrt(mean_squared_error(y, df["lab_sensor_corrected_ec"]))
-mae = mean_absolute_error(y, df["lab_sensor_corrected_ec"])
+# Error analysis
+df_avg["error_uS_cm"] = df_avg["predicted_ec_uS_cm"] - df_avg["commercial_ec_uS_cm"]
+df_avg["percent_error"] = (
+    df_avg["error_uS_cm"] / df_avg["commercial_ec_uS_cm"]
+) * 100
 
-print("Calibration Equation:")
-print(f"EC = {model.coef_[0]:.4f} * Sensor + {model.intercept_:.4f}")
+r2 = r2_score(df_avg["commercial_ec_uS_cm"], df_avg["predicted_ec_uS_cm"])
+rmse = np.sqrt(mean_squared_error(df_avg["commercial_ec_uS_cm"], df_avg["predicted_ec_uS_cm"]))
+mae = mean_absolute_error(df_avg["commercial_ec_uS_cm"], df_avg["predicted_ec_uS_cm"])
+
+print("Log-Quadratic Calibration Equation:")
+print(f"log10(EC) = {a:.6f}(log10(Ratio))^2 + {b:.6f}(log10(Ratio)) + {c:.6f}")
 
 print("\nModel Performance:")
 print(f"R²   = {r2:.4f}")
-print(f"RMSE = {rmse:.4f}")
-print(f"MAE  = {mae:.4f}")
+print(f"RMSE = {rmse:.4f} µS/cm")
+print(f"MAE  = {mae:.4f} µS/cm")
 
-# Save results
+# Save outputs
 os.makedirs("results", exist_ok=True)
-df.to_csv("results/calibration_summary.csv", index=False)
+os.makedirs("data/processed", exist_ok=True)
 
-print("\nCalibration complete. Results saved to results/calibration_summary.csv")
+df_avg.to_csv("results/calibration_summary.csv", index=False)
+df_avg.to_csv("data/processed/calibration_averaged.csv", index=False)
+
+print("\nCalibration complete.")
+print("Results saved to results/calibration_summary.csv")
+print("Averaged data saved to data/processed/calibration_averaged.csv")
