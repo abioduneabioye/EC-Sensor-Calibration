@@ -11,7 +11,7 @@ This project presents a systematic calibration of a lab-developed electrical con
 
 ## Objective
 
-To calibrate a lab-developed EC sensor by comparing its measurements against a commercial conductivity meter across a controlled NaCl concentration range.
+To calibrate a lab-developed EC sensor by mapping its electrical response (I/V ratio) to conductivity (µS/cm) using measurements from a commercial EC meter.
 
 ---
 
@@ -33,72 +33,102 @@ To calibrate a lab-developed EC sensor by comparing its measurements against a c
 
 Each solution is prepared using **500 mL DI water**, with varying NaCl mass to create a logarithmic concentration range.
 
-| Bottle | NaCl Mass (g) | Concentration (g/L) | log10(Conc) | Expected EC (µS/cm)* |
+| Bottle | NaCl Mass (g) | Concentration (g/L) | log10(Conc) | Measured EC (µS/cm) |
 |:------:|--------------:|--------------------:|------------:|--------------------:|
-| B1     | 0.000         | 0.00                | —           | ~0–10              |
-| B2     | 0.005         | 0.01                | -2.00       | ~20–30             |
-| B3     | 0.015         | 0.03                | -1.52       | ~60–80             |
-| B4     | 0.050         | 0.10                | -1.00       | ~200–300           |
-| B5     | 0.150         | 0.30                | -0.52       | ~600–800           |
-| B6     | 0.500         | 1.00                | 0.00        | ~2000              |
-| B7     | 1.500         | 3.00                | 0.48        | ~5000–6000         |
-| B8     | 5.000         | 10.00               | 1.00        | ~15000–20000       |
+| B1     | 0.000         | 0.00                | —           | 1.39               |
+| B2     | 0.005         | 0.01                | -2.00       | 23.83              |
+| B3     | 0.015         | 0.03                | -1.52       | 61.9               |
+| B4     | 0.050         | 0.10                | -1.00       | 206.4              |
+| B5     | 0.150         | 0.30                | -0.52       | 575                |
+| B6     | 0.500         | 1.00                | 0.00        | 1206               |
+| B7     | 1.500         | 3.00                | 0.48        | 6180               |
+| B8     | 5.000         | 10.00               | 1.00        | 15840              |
 
-> *Expected EC values are approximate and depend on temperature and solution conditions.
-
----
-
-## Mass Measurement and Transfer Accuracy
-
-- NaCl is weighed using a **tared weighing boat (or weighing paper)** on an analytical balance.  
-- At low masses (e.g., 0.005 g), relative uncertainty increases and is estimated.  
-- To minimize transfer loss:
-  - Salt is transferred carefully using a spatula  
-  - The weighing container is rinsed with DI water (spray bottle) to recover residual salt  
-- After transfer, the solution is brought to a **fixed final volume of 500 mL**
-
-> This ensures mass conservation and maintains concentration accuracy within approximately **≤1% uncertainty**, making solution preparation a minor source of error.
+> EC values are **measured using the commercial meter**, not theoretical estimates.
 
 ---
 
-## Temperature Control
+## Sensor Output Representation
 
-Electrical conductivity is temperature-dependent; therefore, maintaining **20°C** is essential.
+The lab-developed EC sensor does not directly output conductivity. Instead, it produces:
 
-- Solutions are placed in a **well-mixed water bath**  
-- If a dedicated bath is unavailable, an improvised bath will be used  
-- Temperature is continuously monitored using a thermometer  
-- Measurements are taken only after thermal equilibrium is reached  
+- Raw signals: `Raw_A0`, `Raw_A1`  
+- Adjusted signals: `Adj_A0`, `Adj_A1`  
+- Final variable: **`Adj_Ratio` (I/V ratio)**  
+
+This ratio is used as the **independent variable for calibration**.
 
 ---
 
-## Measurement Procedure
+## Calibration Model
+
+Due to the wide dynamic range of EC values, calibration is performed in **log-log space** using a second-order polynomial:
+
+```text
+log10(EC) = a(log10(Adj_Ratio))² + b(log10(Adj_Ratio)) + c
+The final EC value is obtained by:
+
+EC = 10^[a(log10(Adj_Ratio))² + b(log10(Adj_Ratio)) + c]
+
+This model provides improved accuracy over linear calibration.
+
+Mass Measurement and Transfer Accuracy
+NaCl is weighed using a tared weighing boat (or weighing paper)
+Transfer loss is minimized by rinsing with DI water
+Final solution volume is adjusted to exactly 500 mL
+
+Total uncertainty is maintained within approximately ≤1%
+
+Temperature Control
+All samples are maintained at 20°C
+A well-mixed water bath is used
+Temperature is continuously monitored
+Measurements are taken only after equilibrium is reached
+Measurement Procedure
 
 For each concentration:
 
-1. Gently mix solution using a magnetic stirrer  
-2. Transfer approximately **50 mL** into a clean beaker or flask  
-3. Measure EC using the **commercial EC meter (reference)**  
-4. Measure EC using the **lab-developed sensor**  
-5. Record temperature  
-6. Repeat measurements for **3 trials**
+Gently mix solution using a magnetic stirrer
+Transfer approximately 50 mL into a clean container
+Measure EC using the commercial EC meter (reference)
+Record the lab sensor output (Adj_Ratio)
+Record temperature
+Repeat measurements for 3 trials
 
 Between measurements:
 
-- Probes are rinsed with DI water  
-- Probes are dried to avoid dilution  
-- Measurements are conducted from **low → high concentration** to minimize contamination  
+Probes are rinsed thoroughly with DI water
+Probes are dried (or gently blotted) to avoid dilution
+Measurements are conducted from low → high concentration to minimize contamination
+Trials and Data Collection
 
----
+Each concentration is measured in triplicate (3 trials):
 
-## Trials and Data Collection
+Each trial is recorded as a separate row in the dataset
+The trial column identifies repeated measurements
+Final calibration uses averaged values for each concentration to reduce noise
+Outliers (if present) can be identified and excluded before averaging
 
-Each concentration is measured in **triplicate (3 trials)**:
+Example:
 
-- Each trial is recorded as a separate row in the dataset  
-- Final calibration uses **averaged values** to reduce noise  
----
+sample_id,...,commercial_ec_uS_cm,adj_ratio,trial
+B3,...,61.9,1.18,1
+B3,...,63.2,1.20,2
+B3,...,60.5,1.17,3
+Sensor Range and Limitations
 
+The sensor exhibits reliable behavior within:
+
+~1 → 15,000 µS/cm
+
+Observations:
+
+Strong response for B1–B8
+Nonlinear behavior begins near ~30,000 µS/cm
+At ~50,000 µS/cm, output becomes unstable
+Negative ratios observed due to offset dominance and saturation
+
+Calibration is valid only within the low-to-moderate EC range.
 ## Results
 
 ### Calibration Curve
