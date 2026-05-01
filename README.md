@@ -35,14 +35,14 @@ Each solution is prepared using **500 mL DI water**, with varying NaCl mass to c
 
 | Bottle | NaCl Mass (g) | Concentration (g/L) | log10(Conc) | Measured EC (µS/cm) |
 |:------:|--------------:|--------------------:|------------:|--------------------:|
-| B1     | 0.000         | 0.00                | —           | 1.39               |
-| B2     | 0.005         | 0.01                | -2.00       | 23.83              |
-| B3     | 0.015         | 0.03                | -1.52       | 61.9               |
-| B4     | 0.050         | 0.10                | -1.00       | 206.4              |
-| B5     | 0.150         | 0.30                | -0.52       | 575                |
-| B6     | 0.500         | 1.00                | 0.00        | 1206               |
-| B7     | 1.500         | 3.00                | 0.48        | 6180               |
-| B8     | 5.000         | 10.00               | 1.00        | 15840              |
+| B1     | 0.000         | 0.00                | —           | 1.39 |
+| B2     | 0.005         | 0.01                | -2.00       | 23.83 |
+| B3     | 0.015         | 0.03                | -1.52       | 61.9 |
+| B4     | 0.050         | 0.10                | -1.00       | 206.4 |
+| B5     | 0.150         | 0.30                | -0.52       | 575 |
+| B6     | 0.500         | 1.00                | 0.00        | 1206 |
+| B7     | 1.500         | 3.00                | 0.48        | 6180 |
+| B8     | 5.000         | 10.00               | 1.00        | 15840 |
 
 > EC values are **measured using the commercial meter**, not theoretical estimates.
 
@@ -66,8 +66,6 @@ Due to the wide dynamic range of EC values, calibration is performed in **log-lo
 
 ```text
 log10(EC) = a(log10(Adj_Ratio))² + b(log10(Adj_Ratio)) + c
-The final EC value is obtained by:
-
 EC = 10^[a(log10(Adj_Ratio))² + b(log10(Adj_Ratio)) + c]
 
 This model provides improved accuracy over linear calibration.
