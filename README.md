@@ -131,15 +131,15 @@ Calibration is valid only within the low-to-moderate EC range.
 
 ### Calibration Curve
 
-![Calibration Curve](results/figures/calibration_curve.png)
+<img src="results/figures/calibration_curve.png" width="700">
 
 ### EC vs Logarithmic Concentration
 
-![EC vs Concentration](results/figures/ec_vs_concentration_log.png)
+<img src="results/figures/ec_vs_concentration_log.png" width="700">
 
 ### Calibration Error
 
-![Calibration Error](results/figures/error_plot.png)
+<img src="results/figures/error_plot.png" width="700">
 
 > The calibration model maps the lab sensor EC output to the commercial meter readings using regression analysis to quantify accuracy, bias, and error.
 
